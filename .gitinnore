@@ -1,0 +1,32 @@
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.env
+.DS_Store
+
+
+# Claude Code local settings
+**/.claude/settings.local.json
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Git worktrees
+.worktrees
+.superpowers/
+.claude/worktrees
+.gstack/
