@@ -30,3 +30,6 @@ __pycache__/
 .superpowers/
 .claude/worktrees
 .gstack/
+
+# local run
+localrun.sh
