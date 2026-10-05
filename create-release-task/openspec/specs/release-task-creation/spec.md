@@ -19,11 +19,15 @@ The system SHALL build the parent summary as `release <N> ------- <V> ----------
 - **THEN** the summary contains `v2.14.0-rc1` unchanged
 
 ### Requirement: Fixed subtask checklist
-The system SHALL use exactly these nine subtask summaries, in this order: `create portal branch`, `create backend branch`, `check release note`, `test vpp on stage`, `run e2e test on stage`, `check new feature on stage`, `run api test on stage`, `check sap on stage`, `check on prod`.
+The system SHALL use exactly these ten subtask summaries, in this order: `check feature toggle SRE request`, `create portal branch`, `create backend branch`, `check release note`, `test vpp on stage`, `run e2e test on stage`, `check new feature on stage`, `run api test on stage`, `check sap on stage`, `check on prod`.
 
 #### Scenario: Checklist contents
 - **WHEN** the checklist is read
-- **THEN** it contains those nine summaries in that order, and nothing else
+- **THEN** it contains those ten summaries in that order, and nothing else
+
+#### Scenario: Feature toggle check comes first
+- **WHEN** the checklist is read
+- **THEN** its first entry is exactly `check feature toggle SRE request`, with `SRE` in capitals
 
 ### Requirement: Detect an existing release task
 Before any write, the system SHALL search the resolved sprint for issues of the parent issue type and compare each `summary` exactly (case-sensitive, after trimming outer whitespace) against the built parent summary. JQL text search SHALL NOT be used to decide a match.
@@ -49,14 +53,18 @@ The system SHALL compare the parent's existing subtask summaries exactly (trimme
 
 #### Scenario: Fresh parent
 - **WHEN** the parent is being created
-- **THEN** all nine subtasks are planned for creation, in checklist order
+- **THEN** all ten subtasks are planned for creation, in checklist order
 
 #### Scenario: Partially complete parent
 - **WHEN** the existing parent already has `create portal branch` and `check release note`
-- **THEN** only the other seven are planned, in checklist order
+- **THEN** only the other eight are planned, in checklist order
+
+#### Scenario: Release task created before the checklist grew
+- **WHEN** the existing parent has the nine original subtasks but not `check feature toggle SRE request`
+- **THEN** only `check feature toggle SRE request` is planned, and existing subtasks are not reordered
 
 #### Scenario: Complete parent
-- **WHEN** the existing parent already has all nine
+- **WHEN** the existing parent already has all ten
 - **THEN** nothing is planned, and the run reports the release task is already complete
 
 #### Scenario: Extra subtasks are ignored
@@ -67,8 +75,8 @@ The system SHALL compare the parent's existing subtask summaries exactly (trimme
 When executing, the system SHALL: (1) create the parent if planned; (2) add a newly created parent to the resolved sprint immediately, before any subtask is created; (3) create each planned subtask sequentially in checklist order, with `parent` set to the parent key and the resolved subtask issue type. Subtasks SHALL NOT be added to the sprint separately.
 
 #### Scenario: Full creation
-- **WHEN** a plan with a new parent and nine subtasks runs successfully
-- **THEN** one parent is created and added to the sprint, then nine subtasks are created in checklist order under it
+- **WHEN** a plan with a new parent and ten subtasks runs successfully
+- **THEN** one parent is created and added to the sprint, then ten subtasks are created in checklist order under it, the first being `check feature toggle SRE request`
 
 #### Scenario: Reused parent is not moved
 - **WHEN** the parent is reused
@@ -94,5 +102,5 @@ Running the same command again after a successful run SHALL perform no writes. R
 
 #### Scenario: Resume after partial failure
 - **WHEN** a run failed after creating the parent and four subtasks, and the command is run again
-- **THEN** the second run reuses the parent and creates exactly the five missing subtasks
+- **THEN** the second run reuses the parent and creates exactly the six missing subtasks
 
