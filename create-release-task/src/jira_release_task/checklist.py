@@ -9,6 +9,7 @@ from __future__ import annotations
 PARENT_SUMMARY = "release {number} ------- {version} -----------------------------------"
 
 SUBTASK_SUMMARIES: tuple[str, ...] = (
+    "check feature toggle SRE request",
     "create portal branch",
     "create backend branch",
     "check release note",

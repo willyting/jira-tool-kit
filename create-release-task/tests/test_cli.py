@@ -45,22 +45,22 @@ def invoke(*args, input=None):
 def test_success_with_yes(fake):
     result = invoke(*ARGS, "--yes")
     assert result.exit_code == 0, result.output
-    assert "Created 10 issues in reseller 97." in result.output
+    assert "Created 11 issues in reseller 97." in result.output
     assert build_parent_summary(97, "2.14.0") in result.output
-    assert len(fake.create_calls) == 10
+    assert len(fake.create_calls) == 11
 
 
 def test_dry_run_makes_no_writes(fake):
     result = invoke(*ARGS, "--dry-run")
     assert result.exit_code == 0, result.output
-    assert "10 issue(s) would be created" in result.output
+    assert "11 issue(s) would be created" in result.output
     assert fake.write_count == 0
 
 
 def test_confirmation_accepted(fake):
     result = invoke(*ARGS, input="y\n")
     assert result.exit_code == 0, result.output
-    assert len(fake.create_calls) == 10
+    assert len(fake.create_calls) == 11
 
 
 def test_confirmation_declined(fake):

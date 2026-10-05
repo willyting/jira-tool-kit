@@ -22,7 +22,7 @@ async def test_no_existing_task_plans_everything():
     plan = await plan_for(FakeClient())
     assert plan.parent.needs_create and plan.parent.summary == SUMMARY
     assert [s.summary for s in plan.subtasks] == list(SUBTASK_SUMMARIES)
-    assert plan.to_create == 10
+    assert plan.to_create == 11
 
 
 async def test_existing_task_is_reused():
@@ -30,7 +30,7 @@ async def test_existing_task_is_reused():
     key = client.seed(SUMMARY)
     plan = await plan_for(client)
     assert plan.parent.existing_key == key
-    assert plan.to_create == 9
+    assert plan.to_create == 10
 
 
 async def test_existing_summary_compared_after_trim():
@@ -68,7 +68,7 @@ async def test_partial_subtasks_plan_only_missing_in_order():
     plan = await plan_for(client)
     missing = [s.summary for s in plan.subtasks if s.needs_create]
     assert missing == [s for s in SUBTASK_SUMMARIES if s not in {"check release note", "create portal branch"}]
-    assert plan.to_create == 7
+    assert plan.to_create == 8
 
 
 async def test_complete_parent_plans_nothing():
@@ -85,7 +85,7 @@ async def test_extra_subtasks_are_ignored():
     client.seed("hotfix follow-up", type_id="10003", parent=parent)
     plan = await plan_for(client)
     assert "hotfix follow-up" not in [s.summary for s in plan.subtasks]
-    assert plan.to_create == 9
+    assert plan.to_create == 10
 
 
 async def test_subtask_match_is_case_sensitive():
@@ -94,3 +94,18 @@ async def test_subtask_match_is_case_sensitive():
     client.seed("Check On Prod", type_id="10003", parent=parent)
     plan = await plan_for(client)
     assert plan.subtasks[-1].needs_create
+
+
+async def test_release_from_before_checklist_grew_gets_only_new_subtask():
+    client = FakeClient()
+    parent = client.seed(SUMMARY)
+    original = [s for s in SUBTASK_SUMMARIES if s != "check feature toggle SRE request"]
+    assert len(original) == 9
+    for s in original:
+        client.seed(s, type_id="10003", parent=parent)
+
+    plan = await plan_for(client)
+    assert [s.summary for s in plan.subtasks if s.needs_create] == [
+        "check feature toggle SRE request"
+    ]
+    assert plan.to_create == 1

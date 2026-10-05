@@ -43,10 +43,10 @@ def test_result_lists_keys_status_and_urls():
     out = capture(render_result, result, BASE, "reseller 97")
 
     lines = [l for l in out.splitlines() if "/browse/" in l]
-    assert len(lines) == 10
+    assert len(lines) == 11
     assert all("created" in l for l in lines)
     assert f"{BASE}/browse/VOR-1" in lines[0]
-    assert "Created 10 issues in reseller 97." in out
+    assert "Created 11 issues in reseller 97." in out
 
 
 def test_partial_failure_lists_created():

@@ -4,8 +4,8 @@ Creates a reseller release checklist in Jira in one command. The tool:
 
 1. finds the sprint `reseller <N>` on the `VOR board`;
 2. creates the task `release <N> ------- <version> -----------------------------------` and puts it in that sprint;
-3. creates nine subtasks under it, in this order:
-   `create portal branch`, `create backend branch`, `check release note`,
+3. creates ten subtasks under it, in this order:
+   `check feature toggle SRE request`, `create portal branch`, `create backend branch`, `check release note`,
    `test vpp on stage`, `run e2e test on stage`, `check new feature on stage`,
    `run api test on stage`, `check sap on stage`, `check on prod`.
 
@@ -84,15 +84,17 @@ Sprint:  reseller 97 (id 501)
 Project: VOR
 
 [create] release 97 ------- 2.14.0 -----------------------------------
+    [create] check feature toggle SRE request
     [create] create portal branch
     ...
     [create] check on prod
 
 VOR-101  created   release 97 ------- 2.14.0 -----------------------------------  https://dibts3.atlassian.net/browse/VOR-101
-    VOR-102  created   create portal branch  https://dibts3.atlassian.net/browse/VOR-102
+    VOR-102  created   check feature toggle SRE request  https://dibts3.atlassian.net/browse/VOR-102
+    VOR-103  created   create portal branch  https://dibts3.atlassian.net/browse/VOR-103
     ...
 
-Created 10 issues in reseller 97.
+Created 11 issues in reseller 97.
 ```
 
 ## Re-running is safe
@@ -106,6 +108,12 @@ the same title, comparing the dashes too.
   and writes nothing.
 
 So if a run fails partway, run the same command again to finish it.
+
+The same applies when the checklist gains a step. For example, release tasks
+created before `check feature toggle SRE request` was added get just that one
+subtask when you re-run the tool for them. It is created last, so on those
+older tasks it appears at the bottom of the subtask list, not the top. The tool
+never reorders existing subtasks.
 
 ### If a run fails
 

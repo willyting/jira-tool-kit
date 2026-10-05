@@ -22,8 +22,9 @@ async def test_full_run_order():
     assert first == {"project": "VOR", "type_id": "10002", "summary": SUMMARY, "parent": None}
     assert client.sprint_adds == [(501, [result.parent.key])]
     assert [c["summary"] for c in subs] == list(SUBTASK_SUMMARIES)
+    assert subs[0]["summary"] == "check feature toggle SRE request"
     assert all(c["parent"] == result.parent.key and c["type_id"] == "10003" for c in subs)
-    assert result.created_count == 10
+    assert result.created_count == 11
 
 
 async def test_sprint_add_happens_before_any_subtask():
@@ -50,7 +51,7 @@ async def test_reused_parent_is_not_moved():
     result = await run(client)
     assert client.sprint_adds == []
     assert not result.parent.created
-    assert result.created_count == 9
+    assert result.created_count == 10
 
 
 async def test_failure_at_fifth_subtask_stops_and_reports():
@@ -105,5 +106,5 @@ async def test_resume_after_partial_failure_creates_exactly_missing():
 
     new_calls = client.create_calls[before:]
     assert [c["summary"] for c in new_calls] == list(SUBTASK_SUMMARIES[4:])
-    assert result.created_count == 5
+    assert result.created_count == 6
     assert [s.summary for s in result.subtasks] == list(SUBTASK_SUMMARIES)

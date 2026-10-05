@@ -27,6 +27,7 @@ def test_version_kept_verbatim():
 
 def test_checklist_contents_and_order():
     assert SUBTASK_SUMMARIES == (
+        "check feature toggle SRE request",
         "create portal branch",
         "create backend branch",
         "check release note",
@@ -37,3 +38,7 @@ def test_checklist_contents_and_order():
         "check sap on stage",
         "check on prod",
     )
+
+
+def test_feature_toggle_check_comes_first():
+    assert SUBTASK_SUMMARIES[0] == "check feature toggle SRE request"
