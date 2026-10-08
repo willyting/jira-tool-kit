@@ -1,12 +1,12 @@
 """The fixed shape of a release task.
 
-The dash counts in PARENT_SUMMARY are part of the format (7, then 35) and are
+The dash counts in PARENT_SUMMARY are part of the format (17, then 35) and are
 pinned by a test. Changing the checklist is a code change on purpose.
 """
 
 from __future__ import annotations
 
-PARENT_SUMMARY = "release {number} ------- {version} -----------------------------------"
+PARENT_SUMMARY = "[RELEASE] SP{number} ----------------- {version} -----------------------------------"
 
 SUBTASK_SUMMARIES: tuple[str, ...] = (
     "check feature toggle SRE request",

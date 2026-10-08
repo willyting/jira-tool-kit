@@ -41,7 +41,13 @@ async def test_existing_summary_compared_after_trim():
 
 async def test_near_miss_is_not_a_match():
     client = FakeClient()
-    client.seed("release 97 ------ 2.14.0 ---")
+    client.seed("[RELEASE] SP97 ------ 2.14.0 ---")
+    assert (await plan_for(client)).parent.needs_create
+
+
+async def test_old_title_format_is_not_a_match():
+    client = FakeClient()
+    client.seed("release 97 ------- 2.14.0 -----------------------------------")
     assert (await plan_for(client)).parent.needs_create
 
 

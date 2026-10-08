@@ -4,11 +4,11 @@
 TBD - created by archiving change create-release-task. Update Purpose after archive.
 ## Requirements
 ### Requirement: Parent summary format
-The system SHALL build the parent summary as `release <N> ------- <V> -----------------------------------`: the literal word `release`, one space, the sprint number, one space, exactly 7 hyphens, one space, the version with outer whitespace trimmed, one space, and exactly 35 hyphens.
+The system SHALL build the parent summary as `[RELEASE] SP<N> ----------------- <V> -----------------------------------`: the literal `[RELEASE] SP`, the sprint number with no space before it, one space, exactly 17 hyphens, one space, the version with outer whitespace trimmed, one space, and exactly 35 hyphens.
 
 #### Scenario: Summary for sprint 97, version 2.14.0
 - **WHEN** the sprint number is `97` and the version is `2.14.0`
-- **THEN** the summary is exactly `release 97 ------- 2.14.0 -----------------------------------`
+- **THEN** the summary is exactly `[RELEASE] SP97 ----------------- 2.14.0 -----------------------------------`
 
 #### Scenario: Version with surrounding whitespace
 - **WHEN** the version is given as `  2.14.0 `
@@ -41,7 +41,11 @@ Before any write, the system SHALL search the resolved sprint for issues of the 
 - **THEN** the plan reuses that issue as the parent, and no new parent is created
 
 #### Scenario: Near miss is not a match
-- **WHEN** the sprint contains `release 97 ------ 2.14.0 ---` (different dash counts)
+- **WHEN** the sprint contains `[RELEASE] SP97 ------ 2.14.0 ---` (different dash counts)
+- **THEN** it is not treated as a match, and the plan says to create the parent
+
+#### Scenario: Old title format is not a match
+- **WHEN** the sprint contains `release 97 ------- 2.14.0 -----------------------------------`
 - **THEN** it is not treated as a match, and the plan says to create the parent
 
 #### Scenario: Duplicate existing tasks

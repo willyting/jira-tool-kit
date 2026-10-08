@@ -8,13 +8,13 @@ from jira_release_task.checklist import (
 def test_exact_summary():
     assert (
         build_parent_summary(97, "2.14.0")
-        == "release 97 ------- 2.14.0 -----------------------------------"
+        == "[RELEASE] SP97 ----------------- 2.14.0 -----------------------------------"
     )
 
 
 def test_dash_counts_are_pinned():
     dash_runs = [len(part) for part in PARENT_SUMMARY.split(" ") if set(part) == {"-"}]
-    assert dash_runs == [7, 35]
+    assert dash_runs == [17, 35]
 
 
 def test_version_outer_whitespace_trimmed():
